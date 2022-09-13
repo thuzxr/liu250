@@ -47,9 +47,6 @@ def get_router_loopback(router_id):
     cmd = ''
     cmd += 'interface lo\n'
     cmd += 'ip address '+ GROUP_ID+'.%s.0.1/24\n'%(str(150 + router_id))
-
-    subnets[router_id].add(GROUP_ID+'.%s.0.0/24'%(str(150 + router_id)))
-
     return cmd
 
 def get_router_to_host_command(router_id):
@@ -57,6 +54,8 @@ def get_router_to_host_command(router_id):
     cmd += 'interface host\n'
     # at rounter connected to host
     cmd += 'ip address '+ GROUP_ID + '.%s.0.2/24' %(str(router_id + 100))
+
+    subnets[router_id].add(GROUP_ID + '.%s.0.0/24' %(str(router_id + 100)))
     return cmd
 
 def get_router_ospf_command(router_id):
@@ -77,7 +76,10 @@ print(get_router_loopback(router_id))
 print(get_router_to_host_command(router_id))
 print('exit\nexit\nexit\n')
 
-print('###########################################\nconfigure host###########################################\n'+'ip address add '+ GROUP_ID + '.%s.0.1/24' %(str(router_id + 100)) + ' dev %srouter' %(routers[router_id]))
+print('###########################################')
+print('nconfigure host')
+print('###########################################')
+print('ip address add '+ GROUP_ID + '.%s.0.1/24' %(str(router_id + 100)) + ' dev %srouter' %(routers[router_id]))
 print('ip route add default via '+GROUP_ID + '.%s.0.2' %(str(router_id + 100)))
 print('exit\n')
 
